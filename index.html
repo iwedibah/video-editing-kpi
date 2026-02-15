@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Editing Department KPI Tracker - Vivera Ecosystem</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #27AE60;
+            --light-green: #2ECC71;
+            --primary-orange: #E67E22;
+            --light-orange: #F39C12;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --dark-gray: #2C3E50;
+            --border-gray: #E0E0E0;
+            --red: #E74C3C;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--dark-gray);
+        }
+
+        .tab-button:hover {
+            border-color: var(--primary-orange);
+            background: var(--light-orange);
+            color: var(--white);
+        }
+
+        .tab-button.active {
+            background: var(--primary-green);
+            color: var(--white);
+            border-color: var(--primary-green);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .card h2 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            color: var(--primary-orange);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-green);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--light-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-orange);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-green);
+            color: var(--white);
+        }
+
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: var(--border-gray);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-green), var(--light-green));
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, var(--primary-orange), var(--light-orange));
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, #C0392B, var(--red));
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, var(--white), var(--light-gray));
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-green);
+            text-align: center;
+        }
+
+        .metric-card.warning {
+            border-left-color: var(--primary-orange);
+        }
+
+        .metric-card.danger {
+            border-left-color: var(--red);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin: 0.5rem 0;
+        }
+
+        .metric-value.warning {
+            color: var(--primary-orange);
+        }
+
+        .metric-value.danger {
+            color: var(--red);
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        th {
+            background: var(--primary-green);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--light-gray);
+        }
+
+        .score-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .score-excellent {
+            background: var(--light-green);
+            color: var(--white);
+        }
+
+        .score-good {
+            background: var(--light-orange);
+            color: var(--white);
+        }
+
+        .score-needs-improvement {
+            background: var(--red);
+            color: var(--white);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #D4EDDA;
+            color: #155724;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .alert-warning {
+            background: #FFF3CD;
+            color: #856404;
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        .alert-danger {
+            background: #F8D7DA;
+            color: #721C24;
+            border-left: 4px solid var(--red);
+        }
+
+        .kpi-list {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .kpi-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-gray);
+        }
+
+        .kpi-item:last-child {
+            border-bottom: none;
+        }
+
+        .kpi-name {
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .kpi-input {
+            width: 100px;
+            padding: 0.5rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-indicator.green {
+            background: var(--primary-green);
+        }
+
+        .status-indicator.orange {
+            background: var(--primary-orange);
+        }
+
+        .status-indicator.red {
+            background: var(--red);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+
+        .video-progress-tracker {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .video-item {
+            padding: 1rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .video-item h4 {
+            color: var(--primary-green);
+            margin-bottom: 0.75rem;
+        }
+
+        .time-tracker {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .time-info {
+            background: var(--light-gray);
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .time-info strong {
+            display: block;
+            color: var(--primary-orange);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎬 Video Editing Department KPI Tracker</h1>
+        <p>Vivera Ecosystem - World-Class Performance Management</p>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('individual')">👤 Individual Editor</button>
+            <button class="tab-button" onclick="switchTab('hod')">📊 HOD Dashboard</button>
+            <button class="tab-button" onclick="switchTab('kpis')">📋 KPI Reference</button>
+        </div>
+
+        <!-- INDIVIDUAL EDITOR TAB -->
+        <div id="individual" class="tab-content active">
+            <div class="card">
+                <h2>Daily Work Log & Progress Tracker</h2>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="editor-date">
+                    </div>
+                    <div class="form-group">
+                        <label>Editor Name</label>
+                        <input type="text" id="editor-name" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Tier</label>
+                        <select id="editor-tier">
+                            <option value="Tier 1">Tier 1 - Raw Extractor</option>
+                            <option value="Tier 2">Tier 2 - Trailer/YouTube Editor</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📹 Current Video Project Progress</h3>
+                
+                <div class="video-progress-tracker">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Video Type</label>
+                            <select id="video-type" onchange="updateTimeEstimate()">
+                                <option value="nugget">Nugget (60-90s) - 24-48hrs</option>
+                                <option value="longform">Long-form (15-20min) - 72hrs</option>
+                                <option value="trailer">YouTube Trailer (50-60s) - 24-48hrs</option>
+                                <option value="highlight">Event Highlight (120-140s) - <24hrs</option>
+                                <option value="spotify">Spotify Audio (5-20min) - 48hrs</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Project Name</label>
+                            <input type="text" id="project-name" placeholder="e.g., CEO Training Event Highlight">
+                        </div>
+                        <div class="form-group">
+                            <label>Hours Spent Today</label>
+                            <input type="number" id="hours-spent" min="0" max="24" step="0.5" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Work Completed (%)</label>
+                            <input type="number" id="work-completed" min="0" max="100" step="5" value="0" oninput="updateProgress()">
+                        </div>
+                        <div class="form-group">
+                            <label>Estimated Completion Date</label>
+                            <input type="date" id="completion-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="project-status">
+                                <option value="in-progress">In Progress</option>
+                                <option value="review">Ready for Review</option>
+                                <option value="revision">In Revision</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;">Progress Overview</label>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%">0%</div>
+                        </div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--dark-gray);">
+                            <strong>Work Remaining:</strong> <span id="work-remaining">100%</span>
+                        </div>
+                    </div>
+
+                    <div class="time-tracker">
+                        <div class="time-info">
+                            <strong>Expected Duration</strong>
+                            <span id="expected-duration">-</span>
+                        </div>
+                        <div class="time-info">
+                            <strong>Time Elapsed</strong>
+                            <span id="time-elapsed">-</span>
+                        </div>
+                        <div class="time-info">
+                            <strong>On Schedule</strong>
+                            <span id="schedule-status">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⭐ Quality Assessment (Rate 0-10)</h3>
+                
+                <div class="kpi-list">
+                    <div class="kpi-item">
+                        <span class="kpi-name">🎵 Clean Audio (noise reduction, balanced levels)</span>
+                        <input type="number" class="kpi-input" id="kpi-audio" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">🎨 Color Grading (professional correction)</span>
+                        <input type="number" class="kpi-input" id="kpi-color" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">📝 Captions/Subtitles (error-free, visible, timed)</span>
+                        <input type="number" class="kpi-input" id="kpi-captions" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">🎬 B-Roll Alignment (supports message)</span>
+                        <input type="number" class="kpi-input" id="kpi-broll" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">🪝 Hook Strength (first 3-5 seconds)</span>
+                        <input type="number" class="kpi-input" id="kpi-hook" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">📣 CTA Quality (clear, correct, integrated)</span>
+                        <input type="number" class="kpi-input" id="kpi-cta" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">🔄 Transition Smoothness (no jarring cuts)</span>
+                        <input type="number" class="kpi-input" id="kpi-transitions" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">🎶 Audio Mix (voice + music + SFX blend)</span>
+                        <input type="number" class="kpi-input" id="kpi-audiomix" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">📁 File Organization (naming, folders)</span>
+                        <input type="number" class="kpi-input" id="kpi-files" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name">📖 Storytelling Flow (hook → value → CTA)</span>
+                        <input type="number" class="kpi-input" id="kpi-story" min="0" max="10" step="0.5" value="0" oninput="calculateScore()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>✅ Compliance Checklist</h3>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="check-brand"> Brand Standards Met (colors, fonts, logo)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="check-copyright"> Copyright Cleared (all assets licensed)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="check-duration"> Duration Compliance (meets requirements)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="check-ontime"> On-Time Delivery (within deadline)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="check-qa"> QA Passed First Try
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="check-revision"> Revision <24hrs (if applicable)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📊 Today's Performance Summary</h3>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Quality Score</div>
+                        <div class="metric-value" id="quality-score">0.0</div>
+                        <div style="font-size: 0.75rem; color: #7F8C8D;">Out of 10</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">KPI Percentage</div>
+                        <div class="metric-value" id="kpi-percentage">0%</div>
+                        <div style="font-size: 0.75rem; color: #7F8C8D;">Target: 85%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Performance Rating</div>
+                        <div class="metric-value" id="performance-rating">-</div>
+                        <div style="font-size: 0.75rem; color: #7F8C8D;" id="rating-label">-</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Bonus Points</div>
+                        <div class="metric-value" id="bonus-points">0</div>
+                        <div style="font-size: 0.75rem; color: #7F8C8D;">Compliance bonuses</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes / Challenges Faced</label>
+                    <textarea id="notes" rows="3" placeholder="Document any challenges, learnings, or special circumstances..."></textarea>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="saveEditorData()">💾 Save Daily Entry</button>
+                <button class="btn btn-secondary" onclick="exportEditorData()">📥 Export My Data</button>
+                <button class="btn btn-outline" onclick="clearForm()">🔄 Clear Form</button>
+            </div>
+        </div>
+
+        <!-- HOD DASHBOARD TAB -->
+        <div id="hod" class="tab-content">
+            <div class="alert alert-warning">
+                🔒 <strong>HOD Private Dashboard</strong> - Team performance aggregation and analytics
+            </div>
+
+            <div class="card">
+                <h2>📈 Team Performance Overview</h2>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Videos Delivered Today</div>
+                        <div class="metric-value">12</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Team Avg Quality</div>
+                        <div class="metric-value">8.4</div>
+                    </div>
+                    <div class="metric-card warning">
+                        <div class="metric-label">On-Time Delivery</div>
+                        <div class="metric-value warning">89%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">QA Pass Rate</div>
+                        <div class="metric-value">72%</div>
+                    </div>
+                    <div class="metric-card danger">
+                        <div class="metric-label">Copyright Issues</div>
+                        <div class="metric-value danger">1</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Videos in Progress</div>
+                        <div class="metric-value">18</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>👥 Individual Editor Performance</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Editor</th>
+                            <th>Tier</th>
+                            <th>Videos This Month</th>
+                            <th>Avg Quality</th>
+                            <th>On-Time %</th>
+                            <th>QA Pass %</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Chioma Adewale</td>
+                            <td>Tier 1</td>
+                            <td>45</td>
+                            <td>8.7</td>
+                            <td>95%</td>
+                            <td>80%</td>
+                            <td><span class="score-badge score-excellent">Excellent</span></td>
+                        </tr>
+                        <tr>
+                            <td>Ibrahim Musa</td>
+                            <td>Tier 2</td>
+                            <td>38</td>
+                            <td>8.2</td>
+                            <td>88%</td>
+                            <td>75%</td>
+                            <td><span class="score-badge score-good">Good</span></td>
+                        </tr>
+                        <tr>
+                            <td>Ngozi Okoro</td>
+                            <td>Tier 1</td>
+                            <td>42</td>
+                            <td>9.1</td>
+                            <td>98%</td>
+                            <td>85%</td>
+                            <td><span class="score-badge score-excellent">Excellent</span></td>
+                        </tr>
+                        <tr>
+                            <td>David Okonkwo</td>
+                            <td>Tier 2</td>
+                            <td>25</td>
+                            <td>6.8</td>
+                            <td>70%</td>
+                            <td>60%</td>
+                            <td><span class="score-badge score-needs-improvement">Needs Support</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>🎬 Video Type Performance Analysis</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Video Type</th>
+                            <th>Total Produced</th>
+                            <th>Avg Quality</th>
+                            <th>Avg Time</th>
+                            <th>Success Rate</th>
+                            <th>Common Issues</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nuggets (60-90s)</td>
+                            <td>78</td>
+                            <td>8.6</td>
+                            <td>36hrs</td>
+                            <td>92%</td>
+                            <td>Audio mix, Duration</td>
+                        </tr>
+                        <tr>
+                            <td>Long-form (15-20min)</td>
+                            <td>24</td>
+                            <td>8.9</td>
+                            <td>64hrs</td>
+                            <td>88%</td>
+                            <td>Pacing, B-roll</td>
+                        </tr>
+                        <tr>
+                            <td>Event Highlights</td>
+                            <td>32</td>
+                            <td>8.3</td>
+                            <td>18hrs</td>
+                            <td>95%</td>
+                            <td>Music selection</td>
+                        </tr>
+                        <tr>
+                            <td>YouTube Trailers</td>
+                            <td>45</td>
+                            <td>8.7</td>
+                            <td>32hrs</td>
+                            <td>90%</td>
+                            <td>Hook strength</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3>📊 Quality Metrics Dashboard</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>KPI Category</th>
+                            <th>Team Average</th>
+                            <th>Target</th>
+                            <th>Status</th>
+                            <th>Trend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Audio Quality</td>
+                            <td>8.6</td>
+                            <td>8.5</td>
+                            <td><span class="status-indicator green"></span>On Target</td>
+                            <td>↑ +0.3</td>
+                        </tr>
+                        <tr>
+                            <td>Color Grading</td>
+                            <td>8.4</td>
+                            <td>8.5</td>
+                            <td><span class="status-indicator orange"></span>Needs Improvement</td>
+                            <td>→ 0.0</td>
+                        </tr>
+                        <tr>
+                            <td>Captions Quality</td>
+                            <td>9.2</td>
+                            <td>9.0</td>
+                            <td><span class="status-indicator green"></span>Exceeding</td>
+                            <td>↑ +0.4</td>
+                        </tr>
+                        <tr>
+                            <td>B-Roll Alignment</td>
+                            <td>7.9</td>
+                            <td>8.0</td>
+                            <td><span class="status-indicator orange"></span>Needs Improvement</td>
+                            <td>↓ -0.2</td>
+                        </tr>
+                        <tr>
+                            <td>Hook Strength</td>
+                            <td>8.1</td>
+                            <td>8.0</td>
+                            <td><span class="status-indicator green"></span>On Target</td>
+                            <td>↑ +0.5</td>
+                        </tr>
+                        <tr>
+                            <td>On-Time Delivery</td>
+                            <td>89%</td>
+                            <td>95%</td>
+                            <td><span class="status-indicator orange"></span>Below Target</td>
+                            <td>↓ -3%</td>
+                        </tr>
+                        <tr>
+                            <td>QA Pass Rate (1st Try)</td>
+                            <td>72%</td>
+                            <td>70%</td>
+                            <td><span class="status-indicator green"></span>On Target</td>
+                            <td>↑ +2%</td>
+                        </tr>
+                        <tr>
+                            <td>Copyright Compliance</td>
+                            <td>99%</td>
+                            <td>100%</td>
+                            <td><span class="status-indicator orange"></span>Needs Attention</td>
+                            <td>→ 0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="alert('Team data exported!')">📥 Export Team Report</button>
+                <button class="btn btn-secondary" onclick="alert('Performance review generated!')">📄 Generate Performance Review</button>
+                <button class="btn btn-outline" onclick="alert('Analytics dashboard opened!')">📊 Detailed Analytics</button>
+            </div>
+        </div>
+
+        <!-- KPI REFERENCE TAB -->
+        <div id="kpis" class="tab-content">
+            <div class="card">
+                <h2>📋 Complete KPI Reference Guide</h2>
+                <p style="margin-bottom: 1rem; color: var(--dark-gray);">
+                    This comprehensive list defines all performance indicators for the Video Editing Department.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Technical Quality KPIs</h3>
+                <div class="kpi-list">
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>1. Clean Audio</strong><br>
+                        <small>Noise reduction applied, balanced levels, no distortion</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>2. Color Grading</strong><br>
+                        <small>Consistent, professional color correction throughout</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>3. Captions/Subtitles</strong><br>
+                        <small>Error-free, well-timed, visible, proper formatting</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>4. Audio Mixing</strong><br>
+                        <small>Perfect blend of voice, music, SFX (contextual per video type)</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>5. Resolution & Aspect Ratio</strong><br>
+                        <small>Correct for platform (9:16, 16:9, etc.)</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>6. Smooth Transitions</strong><br>
+                        <small>No jarring cuts, professional B-roll integration</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎨 Content & Creative KPIs</h3>
+                <div class="kpi-list">
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>7. Hook Effectiveness</strong><br>
+                        <small>First 3-5 seconds grab attention immediately</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>8. B-Roll Alignment</strong><br>
+                        <small>Visual elements support narrative/message</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>9. Pacing & Flow</strong><br>
+                        <small>Maintains engagement throughout entire video</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>10. Storytelling Quality</strong><br>
+                        <small>Clear narrative arc: hook → value → CTA</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>✅ Brand & Compliance KPIs</h3>
+                <div class="kpi-list">
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>11. CTA Placement</strong><br>
+                        <small>Clear, correct, well-integrated call-to-action</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>12. Brand Standards</strong><br>
+                        <small>Colors, fonts, logo usage compliance</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>13. Copyright Compliance</strong><br>
+                        <small>All audio/visual assets licensed or royalty-free</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>14. Duration Compliance</strong><br>
+                        <small>Nuggets: 60-90s | Long-form: 15-20min | Highlights: 120-140s | Trailers: 50-60s</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⏱️ Timeliness & Process KPIs</h3>
+                <div class="kpi-list">
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>15. On-Time Delivery</strong><br>
+                        <small>Nuggets/Shorts: 24-48hrs | Long-form: 72hrs (3 days) | Highlights: <24hrs</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>16. Revision Speed</strong><br>
+                        <small>Corrections implemented within 24 hours of feedback</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>17. QA Pass Rate</strong><br>
+                        <small>Target: 70% of videos pass quality check on first submission</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>18. File Organization</strong><br>
+                        <small>Proper naming conventions and folder structure</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎬 Tier-Specific KPIs</h3>
+                <div class="kpi-list">
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>19. Tier 1 Quality</strong><br>
+                        <small>Clean nugget extraction, logical flow, proper labeling</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>20. Tier 2 Enhancement</strong><br>
+                        <small>Motion graphics, music selection, professional polish</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>21. Feedback Implementation</strong><br>
+                        <small>Accurately incorporates notes quickly and effectively</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🤝 Collaboration & Growth KPIs</h3>
+                <div class="kpi-list">
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>22. Team Communication</strong><br>
+                        <small>Timely updates, proactive problem-solving</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>23. Documentation</strong><br>
+                        <small>Project files properly archived and accessible</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>24. Continuous Learning</strong><br>
+                        <small>Stays updated with trends, proposes improvements</small></span>
+                    </div>
+                    <div class="kpi-item">
+                        <span class="kpi-name"><strong>25. Cross-Tier Support</strong><br>
+                        <small>Helps other tiers when needed, mentors juniors</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong>Performance Ratings:</strong><br>
+                • <strong>Excellent (9-10):</strong> Bonus eligible, potential tier advancement<br>
+                • <strong>Good (7.5-8.9):</strong> Standard performance, targeted development<br>
+                • <strong>Needs Improvement (<7.5):</strong> Training plan, mentorship required
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date by default
+        document.getElementById('editor-date').valueAsDate = new Date();
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateProgress() {
+            const completed = parseFloat(document.getElementById('work-completed').value) || 0;
+            const remaining = 100 - completed;
+            
+            const progressFill = document.getElementById('progress-fill');
+            progressFill.style.width = completed + '%';
+            progressFill.textContent = completed + '%';
+            
+            // Color coding
+            if (completed >= 75) {
+                progressFill.className = 'progress-fill';
+            } else if (completed >= 50) {
+                progressFill.className = 'progress-fill warning';
+            } else {
+                progressFill.className = 'progress-fill danger';
+            }
+            
+            document.getElementById('work-remaining').textContent = remaining + '%';
+        }
+
+        function updateTimeEstimate() {
+            const videoType = document.getElementById('video-type').value;
+            let duration = '';
+            
+            switch(videoType) {
+                case 'nugget':
+                    duration = '24-48 hours';
+                    break;
+                case 'longform':
+                    duration = '72 hours (3 days)';
+                    break;
+                case 'trailer':
+                    duration = '24-48 hours';
+                    break;
+                case 'highlight':
+                    duration = '<24 hours';
+                    break;
+                case 'spotify':
+                    duration = '48 hours';
+                    break;
+            }
+            
+            document.getElementById('expected-duration').textContent = duration;
+        }
+
+        function calculateScore() {
+            // Get all KPI values
+            const kpis = [
+                'kpi-audio', 'kpi-color', 'kpi-captions', 'kpi-broll', 
+                'kpi-hook', 'kpi-cta', 'kpi-transitions', 'kpi-audiomix', 
+                'kpi-files', 'kpi-story'
+            ];
+            
+            let total = 0;
+            kpis.forEach(id => {
+                total += parseFloat(document.getElementById(id).value) || 0;
+            });
+            
+            const avgScore = total / kpis.length;
+            const kpiPercentage = (avgScore / 10) * 100;
+            
+            // Calculate bonus points
+            let bonusPoints = 0;
+            if (document.getElementById('check-brand').checked) bonusPoints += 5;
+            if (document.getElementById('check-copyright').checked) bonusPoints += 5;
+            if (document.getElementById('check-duration').checked) bonusPoints += 5;
+            if (document.getElementById('check-ontime').checked) bonusPoints += 5;
+            if (document.getElementById('check-qa').checked) bonusPoints += 10;
+            if (document.getElementById('check-revision').checked) bonusPoints += 5;
+            
+            // Update display
+            document.getElementById('quality-score').textContent = avgScore.toFixed(1);
+            document.getElementById('kpi-percentage').textContent = kpiPercentage.toFixed(0) + '%';
+            document.getElementById('bonus-points').textContent = bonusPoints;
+            
+            // Set performance rating
+            let rating = '';
+            let ratingLabel = '';
+            let ratingClass = '';
+            
+            if (avgScore >= 9) {
+                rating = 'Excellent';
+                ratingLabel = 'Outstanding work!';
+                ratingClass = '';
+            } else if (avgScore >= 7.5) {
+                rating = 'Good';
+                ratingLabel = 'Solid performance';
+                ratingClass = 'warning';
+            } else {
+                rating = 'Needs Work';
+                ratingLabel = 'Focus on improvement';
+                ratingClass = 'danger';
+            }
+            
+            document.getElementById('performance-rating').textContent = rating;
+            document.getElementById('performance-rating').className = 'metric-value ' + ratingClass;
+            document.getElementById('rating-label').textContent = ratingLabel;
+            
+            // Update KPI percentage color
+            const kpiPercentageEl = document.getElementById('kpi-percentage');
+            if (kpiPercentage >= 85) {
+                kpiPercentageEl.className = 'metric-value';
+            } else if (kpiPercentage >= 70) {
+                kpiPercentageEl.className = 'metric-value warning';
+            } else {
+                kpiPercentageEl.className = 'metric-value danger';
+            }
+        }
+
+        function saveEditorData() {
+            const data = {
+                date: document.getElementById('editor-date').value,
+                editorName: document.getElementById('editor-name').value,
+                tier: document.getElementById('editor-tier').value,
+                videoType: document.getElementById('video-type').value,
+                projectName: document.getElementById('project-name').value,
+                hoursSpent: document.getElementById('hours-spent').value,
+                workCompleted: document.getElementById('work-completed').value,
+                completionDate: document.getElementById('completion-date').value,
+                status: document.getElementById('project-status').value,
+                qualityScore: document.getElementById('quality-score').textContent,
+                kpiPercentage: document.getElementById('kpi-percentage').textContent,
+                notes: document.getElementById('notes').value
+            };
+            
+            // Save to localStorage
+            const savedData = JSON.parse(localStorage.getItem('editorEntries') || '[]');
+            savedData.push(data);
+            localStorage.setItem('editorEntries', JSON.stringify(savedData));
+            
+            alert('✅ Daily entry saved successfully!\n\nQuality Score: ' + data.qualityScore + '\nKPI: ' + data.kpiPercentage);
+        }
+
+        function exportEditorData() {
+            const savedData = JSON.parse(localStorage.getItem('editorEntries') || '[]');
+            
+            if (savedData.length === 0) {
+                alert('No data to export. Please save some entries first.');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(savedData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'editor_kpi_data_' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+        }
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all fields?')) {
+                document.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
+                document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
+                document.querySelectorAll('input[type="checkbox"]').forEach(input => input.checked = false);
+                document.getElementById('notes').value = '';
+                document.getElementById('editor-date').valueAsDate = new Date();
+                calculateScore();
+                updateProgress();
+            }
+        }
+
+        // Initialize
+        updateTimeEstimate();
+        calculateScore();
+    </script>
+</body>
+</html>
